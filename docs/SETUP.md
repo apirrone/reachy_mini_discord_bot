@@ -86,8 +86,8 @@ You should see logs like “Logged in as Reachy Mini (…)”.
 
 ## 7) Use the bot in Discord
 - Mention the bot in any channel: `@Reachy Mini How do I…?`
-- The bot creates a thread (e.g., “Reachy Mini: How do I…”) and replies there.
-- Continue the conversation inside that thread.
+- The bot creates a thread (e.g., “Reachy Mini: How do I…”) and replies.
+- It will only reply when explicitly @mentioned (even inside that thread).
 - Try the slash command `/ping` to verify command registration.
 - Attach small text files (`.txt`, `.md`, `.log`) to include them in the context.
 
@@ -113,4 +113,3 @@ You should see logs like “Logged in as Reachy Mini (…)”.
 - `OPENAI_EMBEDDING_MODEL`: embedding model (default `text-embedding-3-small`).
 
 That’s it! If you want help deploying this as a service (e.g., systemd) or containerizing it, let us know.
-

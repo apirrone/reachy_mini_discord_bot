@@ -4,7 +4,7 @@ A Discord bot named "Reachy Mini" that creates a thread for every conversation a
 
 ## Features
 - Mention the bot anywhere (e.g., `@Reachy Mini ...`) and it creates a thread.
-- Continues the conversation inside that thread.
+- Replies only when explicitly @mentioned (even inside its threads), to avoid noise.
 - RAG retrieval from a local persistent DB (Chroma) with OpenAI embeddings.
 - Simple ingestion CLI to index your docs/logs.
 
@@ -40,7 +40,7 @@ Then in any channel, mention the bot:
 A thread is created and the bot replies using RAG + OpenAI.
 
 ## Notes
-- The bot only replies in threads it creates or when @mentioned in a channel.
+- The bot only replies when it is @mentioned (including inside threads it created).
 - Large answers are split to respect Discord's 2000-char limit.
 - Attachments with text content (e.g., `.txt`, `.log`, `.md`) are read and added to context when small enough.
 

@@ -65,9 +65,8 @@ class ReachyMiniClient(discord.Client):
             return
 
         mentioned = self._is_mentioning_me(message)
-        in_our_thread = await self._is_in_our_thread(message)
-
-        if not mentioned and not in_our_thread:
+        # Reply only when explicitly mentioned, even inside our own threads
+        if not mentioned:
             return
 
         # Ensure we are in a thread; if not, create one from this message
