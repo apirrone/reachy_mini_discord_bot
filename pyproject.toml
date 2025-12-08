@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "reachy-mini-bot"
+version = "0.1.0"
+description = "Discord bot 'Reachy Mini' with RAG + OpenAI"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["discord", "bot", "rag", "openai", "chromadb"]
+dependencies = [
+  "discord.py==2.4.0",
+  "python-dotenv==1.0.1",
+  "openai==1.55.3",
+  "chromadb==0.5.11",
+  "numpy>=1.26",
+  "beautifulsoup4==4.12.3",
+  "pdfminer.six==20231228",
+  "uvloop==0.20.0; platform_system != 'Windows'",
+]
+
+[project.scripts]
+reachy-mini = "reachy_mini_bot.run:run_bot"
+reachy-mini-ingest = "reachy_mini_bot.scripts.ingest:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["reachy_mini_bot"]
+

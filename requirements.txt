@@ -1,0 +1,12 @@
+discord.py==2.4.0
+python-dotenv==1.0.1
+openai==1.55.3
+chromadb==0.5.11
+onnxruntime==1.19.2
+numpy>=1.26
+tqdm==4.66.5
+beautifulsoup4==4.12.3
+unstructured==0.15.12
+markdownify==0.12.1
+pdfminer.six==20231228
+uvloop==0.20.0; platform_system != 'Windows'

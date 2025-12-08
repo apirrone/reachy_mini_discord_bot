@@ -1,0 +1,4 @@
+rag_db/*
+__pycache__/
+*.egg-info/
+.env
