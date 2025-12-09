@@ -49,6 +49,7 @@ A thread is created and the bot replies using RAG + OpenAI.
 - `RAG_COLLECTION`: collection name (default: `reachy_mini`).
 - `OPENAI_MODEL`: chat model (default: `gpt-4o-mini`).
 - `OPENAI_EMBEDDING_MODEL`: embedding model (default: `text-embedding-3-small`).
+- `THREAD_HISTORY_LIMIT`: number of prior messages to include from the current thread (default: `25`).
 
 ## Project layout
 - `reachy_mini_bot/discord_bot.py` — Discord client and thread handling

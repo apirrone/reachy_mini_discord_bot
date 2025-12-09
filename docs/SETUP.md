@@ -55,6 +55,7 @@ Notes
      - `RAG_COLLECTION` (default `reachy_mini`)
      - `OPENAI_MODEL` (default `gpt-4o-mini`)
      - `OPENAI_EMBEDDING_MODEL` (default `text-embedding-3-small`)
+     - `THREAD_HISTORY_LIMIT` (default `25`) — how many prior messages from the current thread to include in the prompt
 
 Example `.env`
 ```
@@ -64,6 +65,7 @@ RAG_DB_PATH=./rag_db
 RAG_COLLECTION=reachy_mini
 OPENAI_MODEL=gpt-4o-mini
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+THREAD_HISTORY_LIMIT=25
 ```
 
 ## 5) Ingest your knowledge base (RAG)

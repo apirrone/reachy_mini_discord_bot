@@ -33,6 +33,7 @@ class ReachyMiniClient(discord.Client):
             embedding_model=self.settings.openai_embedding_model,
         )
         self._sema = asyncio.Semaphore(3)
+        self.thread_history_limit = self.settings.thread_history_limit
 
     async def setup_hook(self) -> None:
         logger.info("Reachy Mini bot is initializing...")
@@ -133,6 +134,26 @@ class ReachyMiniClient(discord.Client):
             content = content.replace(f"<@!{self.user.id}>", " ")
         return content
 
+    async def _gather_thread_history(self, thread: Optional[discord.Thread], limit: int, exclude_message_id: Optional[int] = None) -> str:
+        if not thread:
+            return ""
+        snippets: List[str] = []
+        try:
+            # Oldest first to preserve conversation flow
+            msgs = []
+            async for m in thread.history(limit=limit, oldest_first=True):
+                if exclude_message_id is not None and getattr(m, "id", None) == exclude_message_id:
+                    continue
+                msgs.append(m)
+            for m in msgs:
+                role = "assistant" if m.author.bot else "user"
+                content = m.content
+                if content:
+                    snippets.append(f"{role}: {content}")
+        except Exception:
+            pass
+        return "\n".join(snippets)
+
     async def _collect_text_attachments(self, message: discord.Message, limit_bytes: int = 1_000_000) -> List[str]:
         texts: List[str] = []
         for a in message.attachments:
@@ -175,23 +196,19 @@ class ReachyMiniClient(discord.Client):
             ctx_text = "\n\n".join(ctx_parts) if ctx_parts else "(no context found)"
 
             # Optionally include a brief thread history (most recent 8 messages)
-            history_snippets: List[str] = []
-            if isinstance(message.channel, discord.Thread):
-                try:
-                    async for m in message.channel.history(limit=8, oldest_first=False):
-                        role = "assistant" if m.author.bot else "user"
-                        content = m.content
-                        if content:
-                            history_snippets.append(f"{role}: {content}")
-                except Exception:
-                    pass
-            history_text = "\n".join(reversed(history_snippets)) if history_snippets else ""
+            # Gather current thread history if available (either existing thread or newly created one)
+            current_thread: Optional[discord.Thread] = None
+            if thread is not None:
+                current_thread = thread
+            elif isinstance(message.channel, discord.Thread):
+                current_thread = message.channel
+            history_text = await self._gather_thread_history(current_thread, self.thread_history_limit, exclude_message_id=getattr(message, "id", None))
 
             user_prompt = (
                 f"User message:\n{user_text}\n\n"
-                f"Thread history (latest first):\n{history_text}\n\n"
-                f"Retrieved context:\n{ctx_text}\n\n"
-                "Answer as Reachy Mini."
+                + (f"Thread history:\n{history_text}\n\n" if history_text else "")
+                + f"Retrieved context:\n{ctx_text}\n\n"
+                + "Answer as Reachy Mini."
             )
 
             messages = [

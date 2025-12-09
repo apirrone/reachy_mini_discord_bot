@@ -12,6 +12,7 @@ class Settings:
     rag_collection: str = "reachy_mini"
     openai_model: str = "gpt-4o-mini"
     openai_embedding_model: str = "text-embedding-3-small"
+    thread_history_limit: int = 25
 
 
 def load_settings() -> Settings:
@@ -25,6 +26,11 @@ def load_settings() -> Settings:
     openai_embedding_model = os.getenv(
         "OPENAI_EMBEDDING_MODEL", "text-embedding-3-small"
     ).strip()
+    # Optional: number of prior messages from the current thread to include
+    try:
+        thread_history_limit = int(os.getenv("THREAD_HISTORY_LIMIT", "25").strip())
+    except Exception:
+        thread_history_limit = 25
 
     if not discord_token:
         raise RuntimeError("discord_token is required. Set it in .env or env vars.")
@@ -38,4 +44,5 @@ def load_settings() -> Settings:
         rag_collection=rag_collection,
         openai_model=openai_model,
         openai_embedding_model=openai_embedding_model,
+        thread_history_limit=thread_history_limit,
     )
