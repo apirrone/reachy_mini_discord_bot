@@ -1,15 +1,15 @@
 # Reachy Mini Documentation
 
-**Version:** 1.1.3
-**Generated:** 2025-12-04 15:41 UTC
+**Version:** 1.2.0
+**Generated:** 2025-12-12 18:37 UTC
 
 # Reachy Mini
 
 [![Ask on HuggingChat](https://img.shields.io/badge/Ask_on-HuggingChat-yellow?logo=huggingface&logoColor=yellow&style=for-the-badge)](https://huggingface.co/chat/?attachments=https%3A%2F%2Fgist.githubusercontent.com%2FFabienDanieau%2F919e1d7468fb16e70dbe984bdc277bba%2Fraw%2Fdoc_reachy_mini_full.md&prompt=Read%20this%20documentation%20about%20Reachy%20Mini%20so%20I%20can%20ask%20questions%20about%20it.)
 
-> â ï¸ Reachy Mini is still in beta. Expect bugs, some of them we won't fix right away if they are not a priority.
+> ⚠️ Reachy Mini is still in beta. Expect bugs, some of them we won't fix right away if they are not a priority.
 
-[Reachy Mini](https://www.pollen-robotics.com/reachy-mini/) is an expressive, open-source robot designed for human-robot interaction, creative coding, and AI experimentation. We made it to be affordable, easy to use, hackable and cute, so that you can focus on building cool AI applications!
+[Reachy Mini](https://huggingface.co/blog/reachy-mini) is an expressive, open-source robot designed for human-robot interaction, creative coding, and AI experimentation. We made it to be affordable, easy to use, hackable and cute, so that you can focus on building cool AI applications!
 
 [![Reachy Mini Hello](/docs/assets/reachy_mini_hello.gif)](https://www.pollen-robotics.com/reachy-mini/)
 
@@ -23,18 +23,18 @@ There is also a simulated version of Reachy Mini in [MuJoCo](https://mujoco.org)
 
 ## Assembly guide
 
-ð Follow our step-by-step [Assembly Guide](https://huggingface.co/spaces/pollen-robotics/Reachy_Mini_Assembly_Guide).
+📖 Follow our step-by-step [Assembly Guide](https://huggingface.co/spaces/pollen-robotics/Reachy_Mini_Assembly_Guide).
 
 Most builders finish in about 3 hours, our current speed record is 43 minutes. The guide walks you through every step with clear visuals so you can assemble Reachy Mini confidently from start to finish. Enjoy the build!
 
-â¶ï¸ View the [Assembly Video](https://youtu.be/_r0cHySFbeY?si=6Mw4js8HSUs4cwoJ).
+▶️ View the [Assembly Video](https://youtu.be/_r0cHySFbeY?si=6Mw4js8HSUs4cwoJ).
 
 ## Software overview
 
 This repository provides everything you need to control Reachy Mini, both in simulation and on the real robot. It consists of two main parts:
 
-- **The ð Daemon ð**: A background service that manages communication with the robot's motors and sensors, or with the simulation environment. It should be running before you can control the robot. It can run either for the simulation (MuJoCo) or for the real robot. 
-- **ð SDK & ð¸ï¸ API** to control the robot's main features (head, antennas, camera, speakers, microphone, etc.) and connect with your AI experimentation. Depending on your preferences and needs, there is a [Python SDK](#using-the-python-sdk) and a [HTTP REST API](#using-the-rest-api).
+- **The 😈 Daemon 😈**: A background service that manages communication with the robot's motors and sensors, or with the simulation environment. It should be running before you can control the robot. It can run either for the simulation (MuJoCo) or for the real robot. 
+- **🐍 SDK & 🕸️ API** to control the robot's main features (head, antennas, camera, speakers, microphone, etc.) and connect with your AI experimentation. Depending on your preferences and needs, there is a [Python SDK](#using-the-python-sdk) and a [HTTP REST API](#using-the-rest-api).
 
 Using the [Python SDK](#using-the-python-sdk), making your robot move only require a few lines of code, as illustrated in the example below:
 
@@ -154,7 +154,7 @@ You first have to install the optional dependency `mujoco`.
 pip install reachy-mini[mujoco]
 ```
 
-Then run the daemon with the `--sim`Â argument.
+Then run the daemon with the `--sim` argument.
 
 ```bash
 reachy-mini-daemon --sim
@@ -230,6 +230,10 @@ The daemon also provides a REST API via [fastapi](https://fastapi.tiangolo.com/)
 By default, the API server runs on `http://localhost:8000`. The API is documented using OpenAPI, and you can access the documentation at `http://localhost:8000/docs` when the daemon is running.
 
 More information about the API can be found in the [HTTP API documentation](./docs/rest-api.md).
+
+## Share your apps with the commmunity
+
+You can share your github repositories on social media or use [this guide](https://huggingface.co/blog/pollen-robotics/make-and-publish-your-reachy-mini-apps) to share your app even with users who can't code.
 
 ## Open source & contribution
 
@@ -312,7 +316,8 @@ Reachy Mini class for controlling a simulated or real Reachy Mini robot.
 #### \_\_init\_\_
 
 ```python
-def __init__(localhost_only: bool = True,
+def __init__(robot_name: str = "reachy_mini",
+             localhost_only: bool = True,
              spawn_daemon: bool = False,
              use_sim: bool = False,
              timeout: float = 5.0,
@@ -325,6 +330,7 @@ Initialize the Reachy Mini robot.
 
 **Arguments**:
 
+- `robot_name` _str_ - Name of the robot, defaults to "reachy_mini".
 - `localhost_only` _bool_ - If True, will only connect to localhost daemons, defaults to True.
 - `spawn_daemon` _bool_ - If True, will spawn a daemon to control the robot, defaults to False.
 - `use_sim` _bool_ - If True and spawn_daemon is True, will spawn a simulated robot, defaults to True.
@@ -700,7 +706,8 @@ Set the automatic body yaw.
 ```python
 async def async_play_move(move: Move,
                           play_frequency: float = 100.0,
-                          initial_goto_duration: float = 0.0) -> None
+                          initial_goto_duration: float = 0.0,
+                          sound: bool = True) -> None
 ```
 
 Asynchronously play a Move.
@@ -710,6 +717,7 @@ Asynchronously play a Move.
 - `move` _Move_ - The Move object to be played.
 - `play_frequency` _float_ - The frequency at which to evaluate the move (in Hz).
 - `initial_goto_duration` _float_ - Duration for the initial goto to the starting position of the move (in seconds). If 0, no initial goto is performed.
+- `sound` _bool_ - If True, play the sound associated with the move (if any).
 
 <a id="reachy_mini.kinematics.analytical_kinematics"></a>
 
@@ -1269,7 +1277,7 @@ def distance_between_poses(
 Compute three types of distance between two 4x4 homogeneous transformation matrices.
 
 The result combines translation (in mm) and rotation (in degrees) using an arbitrary but
-emotionally satisfying equivalence: 1 degree â 1 mm.
+emotionally satisfying equivalence: 1 degree ≈ 1 mm.
 
 **Arguments**:
 
@@ -1577,16 +1585,56 @@ Run a shell command and stream its output to the provided logger.
 
 Reachy Mini app assistant functions.
 
-<a id="reachy_mini.apps.assistant.create_gui"></a>
+<a id="reachy_mini.apps.assistant.validate_app_name"></a>
 
-#### create\_gui
+#### validate\_app\_name
 
 ```python
-def create_gui(console: Console, app_name: str | None,
+def validate_app_name(text: str) -> bool | str
+```
+
+Validate the app name.
+
+<a id="reachy_mini.apps.assistant.is_git_repo"></a>
+
+#### is\_git\_repo
+
+```python
+def is_git_repo(path: Path) -> bool
+```
+
+Check if the given path is inside a git repository.
+
+<a id="reachy_mini.apps.assistant.validate_location"></a>
+
+#### validate\_location
+
+```python
+def validate_location(text: str) -> bool | str
+```
+
+Validate the location where to create the app project.
+
+<a id="reachy_mini.apps.assistant.validate_location_and_git_repo"></a>
+
+#### validate\_location\_and\_git\_repo
+
+```python
+def validate_location_and_git_repo(text: str) -> bool | str
+```
+
+Validate the location where to create the app project, ensuring it's not in a git repo.
+
+<a id="reachy_mini.apps.assistant.create_cli"></a>
+
+#### create\_cli
+
+```python
+def create_cli(console: Console, app_name: str | None,
                app_path: Path | None) -> tuple[str, str, Path]
 ```
 
-Create a new Reachy Mini app project using a GUI.
+Create a new Reachy Mini app project using a CLI.
 
 <a id="reachy_mini.apps.assistant.create"></a>
 
@@ -1603,6 +1651,17 @@ Create a new Reachy Mini app project with the given name at the specified path.
 - `console` _Console_ - The console object for printing messages.
 - `app_name` _str_ - The name of the app to create.
 - `app_path` _Path_ - The directory where the app project will be created.
+
+<a id="reachy_mini.apps.assistant.install_app_with_progress"></a>
+
+#### install\_app\_with\_progress
+
+```python
+def install_app_with_progress(console: Console, pip_executable: str,
+                              app_path: Path) -> None
+```
+
+Install the app in a temporary virtual environment with a progress spinner.
 
 <a id="reachy_mini.apps.assistant.check"></a>
 
@@ -1629,6 +1688,16 @@ def request_app_addition(new_app_repo_id: str) -> bool
 
 Request to add the new app to the official Reachy Mini app store.
 
+<a id="reachy_mini.apps.assistant.try_to_push"></a>
+
+#### try\_to\_push
+
+```python
+def try_to_push(console: Console, _app_path: Path) -> bool
+```
+
+Try to push changes to the remote repository.
+
 <a id="reachy_mini.apps.assistant.publish"></a>
 
 #### publish
@@ -1637,7 +1706,8 @@ Request to add the new app to the official Reachy Mini app store.
 def publish(console: Console,
             app_path: str,
             commit_message: str,
-            official: bool = False) -> None
+            official: bool = False,
+            no_check: bool = False) -> None
 ```
 
 Publish the app to the Reachy Mini app store.
@@ -1648,6 +1718,7 @@ Publish the app to the Reachy Mini app store.
 - `app_path` _str_ - Local path to the app to publish.
 - `commit_message` _str_ - Commit message for the app publish.
 - `official` _bool_ - Request to publish the app as an official Reachy Mini app.
+- `no_check` _bool_ - Don't run checks before publishing the app.
 
 <a id="reachy_mini.apps.sources.hf_space"></a>
 
@@ -1689,32 +1760,79 @@ For the moment, only huggingface spaces is implemented.
 
 Utilities for local common venv apps source.
 
+<a id="reachy_mini.apps.sources.local_common_venv.get_app_site_packages"></a>
+
+#### get\_app\_site\_packages
+
+```python
+def get_app_site_packages(app_name: str,
+                          wireless_version: bool = False,
+                          desktop_app_daemon: bool = False) -> Path | None
+```
+
+Public API to get the site-packages directory for a given app's venv.
+
+<a id="reachy_mini.apps.sources.local_common_venv.get_app_python"></a>
+
+#### get\_app\_python
+
+```python
+def get_app_python(app_name: str,
+                   wireless_version: bool = False,
+                   desktop_app_daemon: bool = False) -> Path
+```
+
+Get the Python executable path for an app (cross-platform).
+
+For separate venvs: returns the app's venv Python
+For shared environment: returns the current Python interpreter
+
 <a id="reachy_mini.apps.sources.local_common_venv.list_available_apps"></a>
 
 #### list\_available\_apps
 
 ```python
-async def list_available_apps() -> list[AppInfo]
+async def list_available_apps(
+        wireless_version: bool = False,
+        desktop_app_daemon: bool = False) -> list[AppInfo]
 ```
 
-List apps available from entry points.
+List apps available from entry points or separate venvs.
 
 <a id="reachy_mini.apps.sources.local_common_venv.install_package"></a>
 
 #### install\_package
 
 ```python
-async def install_package(app: AppInfo, logger: logging.Logger) -> int
+async def install_package(app: AppInfo,
+                          logger: logging.Logger,
+                          wireless_version: bool = False,
+                          desktop_app_daemon: bool = False) -> int
 ```
 
 Install a package given an AppInfo object, streaming logs.
+
+<a id="reachy_mini.apps.sources.local_common_venv.get_app_module"></a>
+
+#### get\_app\_module
+
+```python
+def get_app_module(app_name: str,
+                   wireless_version: bool = False,
+                   desktop_app_daemon: bool = False) -> str
+```
+
+Get the module name for an app without loading it (for subprocess execution).
 
 <a id="reachy_mini.apps.sources.local_common_venv.uninstall_package"></a>
 
 #### uninstall\_package
 
 ```python
-async def uninstall_package(app_name: str, logger: logging.Logger) -> int
+async def uninstall_package(app_name: str,
+                            logger: logging.Logger,
+                            wireless_version: bool = False,
+                            desktop_app_daemon: bool = False) -> int
 ```
 
 Uninstall a package given an app name.
@@ -1771,7 +1889,9 @@ Manager for Reachy Mini apps.
 #### \_\_init\_\_
 
 ```python
-def __init__() -> None
+def __init__(wireless_version: bool = False,
+             desktop_app_daemon: bool = False,
+             daemon: Optional["Daemon"] = None) -> None
 ```
 
 Initialize the AppManager.
@@ -1804,7 +1924,7 @@ Check if an app is currently running.
 async def start_app(app_name: str, *args: Any, **kwargs: Any) -> AppStatus
 ```
 
-Start the app, raises RuntimeError if an app is already running.
+Start the app as a subprocess, raises RuntimeError if an app is already running.
 
 <a id="reachy_mini.apps.manager.AppManager.stop_current_app"></a>
 
@@ -1814,7 +1934,7 @@ Start the app, raises RuntimeError if an app is already running.
 async def stop_current_app(timeout: float | None = 5.0) -> None
 ```
 
-Stop the current app.
+Stop the current app subprocess.
 
 <a id="reachy_mini.apps.manager.AppManager.restart_current_app"></a>
 
@@ -1903,7 +2023,7 @@ Base class for Reachy Mini applications.
 #### \_\_init\_\_
 
 ```python
-def __init__() -> None
+def __init__(running_on_wireless: bool = False) -> None
 ```
 
 Initialize the Reachy Mini app.
@@ -2476,6 +2596,26 @@ def get_output_audio_samplerate() -> int
 
 Get the output samplerate of the audio device.
 
+<a id="reachy_mini.media.media_manager.MediaManager.get_input_channels"></a>
+
+#### get\_input\_channels
+
+```python
+def get_input_channels() -> int
+```
+
+Get the number of input channels of the audio device.
+
+<a id="reachy_mini.media.media_manager.MediaManager.get_output_channels"></a>
+
+#### get\_output\_channels
+
+```python
+def get_output_channels() -> int
+```
+
+Get the number of output channels of the audio device.
+
 <a id="reachy_mini.media.media_manager.MediaManager.stop_recording"></a>
 
 #### stop\_recording
@@ -2763,10 +2903,7 @@ WebRTC pipeline using GStreamer.
 #### \_\_init\_\_
 
 ```python
-def __init__(
-        log_level: str = "INFO",
-        resolution: CameraResolution = CameraResolution.R1920x1080at30fps
-) -> None
+def __init__(log_level: str = "INFO") -> None
 ```
 
 Initialize the GStreamer WebRTC pipeline.
@@ -2858,6 +2995,12 @@ Abstract class for opening and managing audio devices.
 
 respeaker samplerate
 
+<a id="reachy_mini.media.audio_base.AudioBase.CHANNELS"></a>
+
+#### CHANNELS
+
+respeaker channels
+
 <a id="reachy_mini.media.audio_base.AudioBase.__init__"></a>
 
 #### \_\_init\_\_
@@ -2919,6 +3062,26 @@ def get_output_audio_samplerate() -> int
 ```
 
 Get the outputsamplerate of the audio device.
+
+<a id="reachy_mini.media.audio_base.AudioBase.get_input_channels"></a>
+
+#### get\_input\_channels
+
+```python
+def get_input_channels() -> int
+```
+
+Get the number of input channels of the audio device.
+
+<a id="reachy_mini.media.audio_base.AudioBase.get_output_channels"></a>
+
+#### get\_output\_channels
+
+```python
+def get_output_channels() -> int
+```
+
+Get the number of output channels of the audio device.
 
 <a id="reachy_mini.media.audio_base.AudioBase.stop_recording"></a>
 
@@ -2990,7 +3153,7 @@ def get_DoA() -> tuple[float, bool] | None
 Get the Direction of Arrival (DoA) value from the ReSpeaker device.
 
 The spatial angle is given in radians:
-0 radians is left, Ï/2 radians is front/back, Ï radians is right.
+0 radians is left, π/2 radians is front/back, π radians is right.
 
 Note: The microphone array requires firmware version 2.1.0 or higher to support this feature.
 The firmware is located in src/reachy_mini/assets/firmware/*.bin.
@@ -3083,6 +3246,26 @@ def get_output_audio_samplerate() -> int
 
 Get the output samplerate of the audio device.
 
+<a id="reachy_mini.media.audio_gstreamer.GStreamerAudio.get_input_channels"></a>
+
+#### get\_input\_channels
+
+```python
+def get_input_channels() -> int
+```
+
+Get the number of input channels of the audio device.
+
+<a id="reachy_mini.media.audio_gstreamer.GStreamerAudio.get_output_channels"></a>
+
+#### get\_output\_channels
+
+```python
+def get_output_channels() -> int
+```
+
+Get the number of output channels of the audio device.
+
 <a id="reachy_mini.media.audio_gstreamer.GStreamerAudio.stop_recording"></a>
 
 #### stop\_recording
@@ -3133,6 +3316,8 @@ def play_sound(sound_file: str) -> None
 
 Play a sound file.
 
+Todo: for now this function is mean to be used on the wireless version.
+
 **Arguments**:
 
 - `sound_file` _str_ - Path to the sound file to play.
@@ -3168,7 +3353,7 @@ Audio device implementation using sounddevice.
 #### \_\_init\_\_
 
 ```python
-def __init__(frames_per_buffer: int = 256, log_level: str = "INFO") -> None
+def __init__(log_level: str = "INFO") -> None
 ```
 
 Initialize the SoundDevice audio device.
@@ -3213,6 +3398,26 @@ def get_output_audio_samplerate() -> int
 
 Get the output samplerate of the audio device.
 
+<a id="reachy_mini.media.audio_sounddevice.SoundDeviceAudio.get_input_channels"></a>
+
+#### get\_input\_channels
+
+```python
+def get_input_channels() -> int
+```
+
+Get the number of input channels of the audio device.
+
+<a id="reachy_mini.media.audio_sounddevice.SoundDeviceAudio.get_output_channels"></a>
+
+#### get\_output\_channels
+
+```python
+def get_output_channels() -> int
+```
+
+Get the number of output channels of the audio device.
+
 <a id="reachy_mini.media.audio_sounddevice.SoundDeviceAudio.stop_recording"></a>
 
 #### stop\_recording
@@ -3243,6 +3448,22 @@ def start_playing() -> None
 
 Open the audio output stream.
 
+<a id="reachy_mini.media.audio_sounddevice.SoundDeviceAudio.ensure_chunk_shape"></a>
+
+#### ensure\_chunk\_shape
+
+```python
+def ensure_chunk_shape(
+        chunk: npt.NDArray[np.float32],
+        target_shape: tuple[int, ...]) -> npt.NDArray[np.float32]
+```
+
+Ensure chunk has the shape (frames, num_channels) as required by outdata.
+
+- If chunk is 1D, tile to required num_channels.
+- If chunk is 2D with mismatched channels, use column 0.
+- If chunk is already correct, return as-is.
+
 <a id="reachy_mini.media.audio_sounddevice.SoundDeviceAudio.stop_playing"></a>
 
 #### stop\_playing
@@ -3258,7 +3479,7 @@ Close the audio output stream.
 #### play\_sound
 
 ```python
-def play_sound(sound_file: str, autoclean: bool = False) -> None
+def play_sound(sound_file: str) -> None
 ```
 
 Play a sound file.
@@ -3266,7 +3487,6 @@ Play a sound file.
 **Arguments**:
 
 - `sound_file` _str_ - Path to the sound file to play. May be given relative to the assets directory or as an absolute path.
-- `autoclean` _bool_ - If True, the audio device will be released after the sound is played.
 
 <a id="reachy_mini.media.camera_base"></a>
 
@@ -3399,6 +3619,16 @@ def get_respeaker_card_number() -> int
 ```
 
 Return the card number of the ReSpeaker sound card, or 0 if not found.
+
+<a id="reachy_mini.media.audio_utils.has_reachymini_asoundrc"></a>
+
+#### has\_reachymini\_asoundrc
+
+```python
+def has_reachymini_asoundrc() -> bool
+```
+
+Check if ~/.asoundrc exists and contains both reachymini_audio_sink and reachymini_audio_src.
 
 <a id="reachy_mini.media"></a>
 
@@ -3546,6 +3776,109 @@ def wait_for_task_completion(task_uid: UUID, timeout: float = 5.0) -> None
 
 Wait for the specified task to complete.
 
+<a id="reachy_mini.io.video_ws"></a>
+
+# reachy\_mini.io.video\_ws
+
+Async WebSocket Frame Sender.
+
+<a id="reachy_mini.io.video_ws.AsyncWebSocketFrameSender"></a>
+
+## AsyncWebSocketFrameSender Objects
+
+```python
+class AsyncWebSocketFrameSender()
+```
+
+Async WebSocket frame sender.
+
+<a id="reachy_mini.io.video_ws.AsyncWebSocketFrameSender.__init__"></a>
+
+#### \_\_init\_\_
+
+```python
+def __init__(ws_uri: str) -> None
+```
+
+Initialize the WebSocket frame sender.
+
+<a id="reachy_mini.io.video_ws.AsyncWebSocketFrameSender.send_frame"></a>
+
+#### send\_frame
+
+```python
+def send_frame(frame: npt.NDArray[np.uint8]) -> None
+```
+
+Send a frame to the WebSocket (Non-blocking).
+
+<a id="reachy_mini.io.video_ws.AsyncWebSocketFrameSender.close"></a>
+
+#### close
+
+```python
+def close() -> None
+```
+
+Close the WebSocket frame sender.
+
+<a id="reachy_mini.io.ws_controller"></a>
+
+# reachy\_mini.io.ws\_controller
+
+Async WebSocket Controller for remote control and streaming of the robot.
+
+<a id="reachy_mini.io.ws_controller.Movement"></a>
+
+## Movement Objects
+
+```python
+@dataclass
+class Movement()
+```
+
+Movement data for the WebSocket controller.
+
+<a id="reachy_mini.io.ws_controller.AsyncWebSocketController"></a>
+
+## AsyncWebSocketController Objects
+
+```python
+class AsyncWebSocketController()
+```
+
+WebSocket controller for remote control and streaming of the robot.
+
+<a id="reachy_mini.io.ws_controller.AsyncWebSocketController.__init__"></a>
+
+#### \_\_init\_\_
+
+```python
+def __init__(ws_uri: str, backend: Backend) -> None
+```
+
+Initialize the WebSocket controller.
+
+<a id="reachy_mini.io.ws_controller.AsyncWebSocketController.on_command"></a>
+
+#### on\_command
+
+```python
+async def on_command(cmd: Dict[str, Any]) -> None
+```
+
+Handle a command from the WebSocket.
+
+<a id="reachy_mini.io.ws_controller.AsyncWebSocketController.stop"></a>
+
+#### stop
+
+```python
+def stop() -> None
+```
+
+Stop the WebSocket controller.
+
 <a id="reachy_mini.io.zenoh_client"></a>
 
 # reachy\_mini.io.zenoh\_client
@@ -3570,10 +3903,15 @@ Zenoh client for Reachy Mini.
 #### \_\_init\_\_
 
 ```python
-def __init__(localhost_only: bool = True)
+def __init__(prefix: str, localhost_only: bool = True)
 ```
 
 Initialize the Zenoh client.
+
+**Arguments**:
+
+- `prefix` - The Zenoh prefix to use for communication (used to identify multiple robots).
+- `localhost_only` - If True, connect to localhost only
 
 <a id="reachy_mini.io.zenoh_client.ZenohClient.wait_for_connection"></a>
 
@@ -3753,7 +4091,7 @@ Zenoh server for Reachy Mini.
 #### \_\_init\_\_
 
 ```python
-def __init__(backend: Backend, localhost_only: bool = True)
+def __init__(prefix: str, backend: Backend, localhost_only: bool = True)
 ```
 
 Initialize the Zenoh server.
@@ -3845,6 +4183,77 @@ class TaskProgress(BaseModel)
 ```
 
 Class to represent task progress.
+
+<a id="reachy_mini.io.audio_ws"></a>
+
+# reachy\_mini.io.audio\_ws
+
+Async WebSocket Audio Streamer.
+
+<a id="reachy_mini.io.audio_ws.AsyncWebSocketAudioStreamer"></a>
+
+## AsyncWebSocketAudioStreamer Objects
+
+```python
+class AsyncWebSocketAudioStreamer()
+```
+
+Async WebSocket audio streamer with send and receive support.
+
+<a id="reachy_mini.io.audio_ws.AsyncWebSocketAudioStreamer.__init__"></a>
+
+#### \_\_init\_\_
+
+```python
+def __init__(ws_uri: str, keep_alive_interval: float = 2.0) -> None
+```
+
+Initialize the WebSocket audio streamer.
+
+**Arguments**:
+
+- `ws_uri` - WebSocket URI to connect to.
+- `keep_alive_interval` - Interval in seconds to send keep-alive pings
+  when no audio is flowing.
+
+<a id="reachy_mini.io.audio_ws.AsyncWebSocketAudioStreamer.send_audio_chunk"></a>
+
+#### send\_audio\_chunk
+
+```python
+def send_audio_chunk(
+    audio: Union[bytes, npt.NDArray[np.int16],
+                 npt.NDArray[np.float32]]) -> None
+```
+
+Queue an audio chunk to be sent.
+
+**Arguments**:
+
+- `audio` - Either raw bytes or a numpy array of int16 or float32.
+  Float32 arrays are assumed to be in [-1, 1] and will
+  be converted to int16 PCM.
+
+<a id="reachy_mini.io.audio_ws.AsyncWebSocketAudioStreamer.get_audio_chunk"></a>
+
+#### get\_audio\_chunk
+
+```python
+def get_audio_chunk(
+        timeout: Optional[float] = 0.01) -> Optional[npt.NDArray[np.float32]]
+```
+
+Retrieve a received audio chunk, if any.
+
+<a id="reachy_mini.io.audio_ws.AsyncWebSocketAudioStreamer.close"></a>
+
+#### close
+
+```python
+def close() -> None
+```
+
+Close the WebSocket audio streamer.
 
 <a id="reachy_mini.daemon.utils"></a>
 
@@ -5706,7 +6115,9 @@ Base class for robot backends, simulated or real.
 ```python
 def __init__(log_level: str = "INFO",
              check_collision: bool = False,
-             kinematics_engine: str = "AnalyticalKinematics") -> None
+             kinematics_engine: str = "AnalyticalKinematics",
+             use_audio: bool = True,
+             wireless_version: bool = False) -> None
 ```
 
 Initialize the backend.
@@ -6311,7 +6722,9 @@ Simulated Reachy Mini using MuJoCo.
 def __init__(scene: str = "empty",
              check_collision: bool = False,
              kinematics_engine: str = "AnalyticalKinematics",
-             headless: bool = False) -> None
+             headless: bool = False,
+             use_audio: bool = False,
+             websocket_uri: Optional[str] = None) -> None
 ```
 
 Initialize the MujocoBackend with a specified scene.
@@ -6322,18 +6735,32 @@ Initialize the MujocoBackend with a specified scene.
 - `check_collision` _bool_ - If True, enable collision checking. Default is False.
 - `kinematics_engine` _str_ - Kinematics engine to use. Defaults to "AnalyticalKinematics".
 - `headless` _bool_ - If True, run Mujoco in headless mode (no GUI). Default is False.
+- `use_audio` _bool_ - If True, use audio. Default is False.
+- `websocket_uri` _Optional[str]_ - If set, allow streaming of the robot view through a WebSocket connection to the specified uri. Defaults to None.
+
+<a id="reachy_mini.daemon.backend.mujoco.backend.MujocoBackend.streaming_loop"></a>
+
+#### streaming\_loop
+
+```python
+def streaming_loop(camera_name: str, ws_uri: str) -> None
+```
+
+Streaming loop for the Mujoco simulation over WebSocket.
+
+Capture the image from the virtual camera and send it over WebSocket to the ws_uri.
 
 <a id="reachy_mini.daemon.backend.mujoco.backend.MujocoBackend.rendering_loop"></a>
 
 #### rendering\_loop
 
 ```python
-def rendering_loop() -> None
+def rendering_loop(camera_name: str, port: int) -> None
 ```
 
 Offline Rendering loop for the Mujoco simulation.
 
-Capture the image from the virtual Reachy's camera and send it over UDP.
+Capture the image from the virtual camera_name and send it over UDP to the port or over WebSocket to the ws_uri.
 
 <a id="reachy_mini.daemon.backend.mujoco.backend.MujocoBackend.run"></a>
 
@@ -6501,6 +6928,16 @@ Send a frame as a JPEG image over UDP.
 
 - `frame` _np.ndarray_ - The frame to be sent, in RGB format.
 
+<a id="reachy_mini.daemon.backend.mujoco.video_udp.UDPJPEGFrameSender.close"></a>
+
+#### close
+
+```python
+def close() -> None
+```
+
+Close the socket.
+
 <a id="reachy_mini.daemon.backend.mujoco"></a>
 
 # reachy\_mini.daemon.backend.mujoco
@@ -6537,6 +6974,8 @@ def __init__(serialport: str,
              check_collision: bool = False,
              kinematics_engine: str = "AnalyticalKinematics",
              hardware_error_check_frequency: float = 1.0,
+             use_audio: bool = True,
+             wireless_version: bool = False,
              hardware_config_filepath: str | None = None)
 ```
 
@@ -6549,6 +6988,8 @@ Initialize the RobotBackend.
 - `check_collision` _bool_ - If True, enable collision checking. Default is False.
 - `kinematics_engine` _str_ - Kinematics engine to use. Defaults to "AnalyticalKinematics".
 - `hardware_error_check_frequency` _float_ - Frequency in seconds to check for hardware errors. Default is 1.0.
+- `use_audio` _bool_ - If True, use audio. Default is True.
+- `wireless_version` _bool_ - If True, indicates that the wireless version of Reachy Mini is used. Default is False.
 - `hardware_config_filepath` _str | None_ - Path to the hardware configuration YAML file. Default is None.
   
   Tries to connect to the Reachy Mini motor controller and initializes the control loop.
@@ -6812,8 +7253,10 @@ Runs the server with the appropriate backend (Mujoco for simulation or RobotBack
 
 ```python
 def __init__(log_level: str = "INFO",
+             robot_name: str = "reachy_mini",
              wireless_version: bool = False,
-             stream: bool = False) -> None
+             stream: bool = False,
+             desktop_app_daemon: bool = False) -> None
 ```
 
 Initialize the Reachy Mini daemon.
@@ -6831,6 +7274,9 @@ async def start(sim: bool = False,
                 check_collision: bool = False,
                 kinematics_engine: str = "AnalyticalKinematics",
                 headless: bool = False,
+                use_audio: bool = True,
+                websocket_uri: Optional[str] = None,
+                stream_media: bool = False,
                 hardware_config_filepath: str | None = None) -> "DaemonState"
 ```
 
@@ -6846,6 +7292,9 @@ Start the Reachy Mini daemon.
 - `check_collision` _bool_ - If True, enable collision checking. Defaults to False.
 - `kinematics_engine` _str_ - Kinematics engine to use. Defaults to "AnalyticalKinematics".
 - `headless` _bool_ - If True, run Mujoco in headless mode (no GUI). Defaults to False.
+- `websocket_uri` _Optional[str]_ - If set, allow remote control and streaming of the robot through a WebSocket connection to the specified uri. Defaults to None.
+- `use_audio` _bool_ - If True, enable audio. Defaults to True.
+- `stream_media` _bool_ - If True, stream media to the WebSocket. Defaults to False.
 - `hardware_config_filepath` _str | None_ - Path to the hardware configuration YAML file. Defaults to None.
   
 
@@ -6881,6 +7330,9 @@ async def restart(sim: Optional[bool] = None,
                   serialport: Optional[str] = None,
                   scene: Optional[str] = None,
                   headless: Optional[bool] = None,
+                  use_audio: Optional[bool] = None,
+                  websocket_uri: Optional[str] = None,
+                  stream_media: Optional[bool] = None,
                   localhost_only: Optional[bool] = None,
                   wake_up_on_start: Optional[bool] = None,
                   goto_sleep_on_stop: Optional[bool] = None) -> "DaemonState"
@@ -6894,6 +7346,9 @@ Restart the Reachy Mini daemon.
 - `serialport` _str_ - Serial port for real motors. Defaults to None (uses the previous value).
 - `scene` _str_ - Name of the scene to load in simulation mode ("empty" or "minimal"). Defaults to None (uses the previous value).
 - `headless` _bool_ - If True, run Mujoco in headless mode (no GUI). Defaults to None (uses the previous value).
+- `use_audio` _bool_ - If True, enable audio. Defaults to None (uses the previous value).
+- `websocket_uri` _Optional[str]_ - If set, allow remote control and streaming of the robot through a WebSocket connection to the specified uri. Defaults to None (uses the previous value).
+- `stream_media` _bool_ - If True, stream media to the WebSocket. Defaults to None (uses the previous value).
 - `localhost_only` _bool_ - If True, restrict the server to localhost only clients. Defaults to None (uses the previous value).
 - `wake_up_on_start` _bool_ - If True, wake up Reachy Mini on start. Defaults to None (don't wake up).
 - `goto_sleep_on_stop` _bool_ - If True, put Reachy Mini to sleep on stop. Defaults to None (don't go to sleep).
@@ -6926,7 +7381,10 @@ async def run4ever(sim: bool = False,
                    goto_sleep_on_stop: bool = True,
                    check_collision: bool = False,
                    kinematics_engine: str = "AnalyticalKinematics",
-                   headless: bool = False) -> None
+                   headless: bool = False,
+                   use_audio: bool = True,
+                   websocket_uri: Optional[str] = None,
+                   stream_media: bool = False) -> None
 ```
 
 Run the Reachy Mini daemon indefinitely.
@@ -6944,6 +7402,9 @@ First, it starts the daemon, then it keeps checking the status and allows for gr
 - `check_collision` _bool_ - If True, enable collision checking. Defaults to False.
 - `kinematics_engine` _str_ - Kinematics engine to use. Defaults to "AnalyticalKinematics".
 - `headless` _bool_ - If True, run Mujoco in headless mode (no GUI). Defaults to False.
+- `use_audio` _bool_ - If True, enable audio. Defaults to True.
+- `websocket_uri` _Optional[str]_ - If set, allow remote control and streaming of the robot through a WebSocket connection to the specified uri. Defaults to None.
+- `stream_media` _bool_ - If True, stream media to the WebSocket. Defaults to False.
 
 <a id="reachy_mini.daemon.daemon.DaemonState"></a>
 
@@ -6987,6 +7448,17 @@ class Move(ABC)
 ```
 
 Abstract base class for defining a move on the ReachyMini robot.
+
+<a id="reachy_mini.motion.move.Move.sound_path"></a>
+
+#### sound\_path
+
+```python
+@property
+def sound_path() -> Optional[Path]
+```
+
+Get the sound path associated with the move, if any.
 
 <a id="reachy_mini.motion.move.Move.duration"></a>
 
@@ -7109,7 +7581,7 @@ Represent a recorded move.
 #### \_\_init\_\_
 
 ```python
-def __init__(move: Dict[str, Any]) -> None
+def __init__(move: Dict[str, Any], sound_path: Optional[Path] = None) -> None
 ```
 
 Initialize RecordedMove.
@@ -7124,6 +7596,17 @@ def duration() -> float
 ```
 
 Get the duration of the recorded move.
+
+<a id="reachy_mini.motion.recorded_move.RecordedMove.sound_path"></a>
+
+#### sound\_path
+
+```python
+@property
+def sound_path() -> Optional[Path]
+```
+
+Get the sound path associated with the move, if any.
 
 <a id="reachy_mini.motion.recorded_move.RecordedMove.evaluate"></a>
 
@@ -7297,7 +7780,7 @@ Feel free to explore and contribute to this list!
 
 - **[Reachy Mini Dancer](https://github.com/LAURA-agent/reachy_mini_dancer)**: by @Townie. A desktop viewer with daemon UI and choreography system.# Reachy Mini API Documentation
 
-*â ï¸ All examples shown below suppose that you have already started the Reachy Mini daemon, either by running `reachy-mini-daemon` or by using the Python module `reachy_mini.daemon.app.main`. â ï¸*
+*⚠️ All examples shown below suppose that you have already started the Reachy Mini daemon, either by running `reachy-mini-daemon` or by using the Python module `reachy_mini.daemon.app.main`. ⚠️*
 
 ## ReachyMini
 
@@ -7469,7 +7952,7 @@ with ReachyMini() as reachy:
         time.sleep(0.01)
 ```
 
-â ï¸ <b>BEWARE: Mini's head range of motion is limited</b> â ï¸
+⚠️ <b>BEWARE: Mini's head range of motion is limited</b> ⚠️
 
 
 When it comes to the reachy mini's head, it is important to note that it has several physical limitations of its head and body position and orientation 
@@ -7714,11 +8197,11 @@ This will create a new directory called `my_app_name` with the following structu
 
 ```
 my_app_name/
-âââ pyproject.toml
-âââ README.md
-âââ my_app_name/
-â   âââ __init__.py
-â   âââ main.py
+├── pyproject.toml
+├── README.md
+├── my_app_name/
+│   ├── __init__.py
+│   └── main.py
 ```
 
 You can run your app directly as a script:
@@ -7798,7 +8281,21 @@ When starting a client with `with ReachyMini() as mini:` in Mujoco (--sim mode),
 Circular buffer overrun. To avoid, increase fifo_size URL option. To survive in such case, use overrun_nonfatal option
 ```
 
-This message comes from FFmpeg (embedded in OpenCV) while consuming the UDP video stream. It appears because the frames are not being used, causing the buffer to fill up. If you do not intend to use the frames, set `ReachyMini(media_backend="no_media")` or `ReachyMini(media_backend="default_no_video")`.# Set up your Reachy Mini wireless
+This message comes from FFmpeg (embedded in OpenCV) while consuming the UDP video stream. It appears because the frames are not being used, causing the buffer to fill up. If you do not intend to use the frames, set `ReachyMini(media_backend="no_media")` or `ReachyMini(media_backend="default_no_video")`.
+
+
+## PortAudio error when starting the daemon
+
+Some users may have an error when launching the daemon for the first time : `OSError: PortAudio library not found`. 
+
+To resolve that, you can install manually this library by executing in the terminal : 
+
+```bash
+sudo apt-get install libportaudio2
+```
+
+Then you can launch the daemon again : `reachy-mini-daemon`
+# Set up your Reachy Mini wireless
 
 ## Connect to a Wi-Fi network
 
@@ -8023,7 +8520,7 @@ def plot_errors_compare(
     ax.legend()
 
     fig.suptitle(
-        f"Pose tracking errors vs time â compare A vs B â {move_name}", fontsize=14
+        f"Pose tracking errors vs time – compare A vs B – {move_name}", fontsize=14
     )
     fig.savefig(out_png, dpi=150)
     plt.close(fig)
@@ -8102,7 +8599,7 @@ def plot_xyzrpy_compare(
 
     axes[-1].set_xlabel("Time [s] (each run normalized to start at 0)")
     fig.suptitle(
-        f"Head XYZ (mm) and RPY (deg) vs time â compare A vs B â {move_name}",
+        f"Head XYZ (mm) and RPY (deg) vs time – compare A vs B – {move_name}",
         fontsize=14,
     )
     fig.savefig(out_png, dpi=150)
@@ -8684,13 +9181,13 @@ def plot_errors_stack(
     )
 
     ax = axes[0]
-    ax.plot(t, trans_mm, linewidth=1.6, label="|Îx|")
+    ax.plot(t, trans_mm, linewidth=1.6, label="|Δx|")
     ax.set_ylabel("Position error [mm]")
     ax.grid(True, which="both", alpha=0.3)
     ax.legend()
 
     ax = axes[1]
-    ax.plot(t, ang_deg, linewidth=1.6, label="|ÎÎ¸|")
+    ax.plot(t, ang_deg, linewidth=1.6, label="|Δθ|")
     ax.set_ylabel("Angular error [deg]")
     ax.grid(True, which="both", alpha=0.3)
     ax.legend()
@@ -9254,7 +9751,7 @@ def main() -> None:
                     print("  No speech detected")
                 else:
                     print(
-                        f"  Small change in DOA: {doa[0]:.1f}Â° (last was {last_doa:.1f}Â°). Not moving."
+                        f"  Small change in DOA: {doa[0]:.1f}° (last was {last_doa:.1f}°). Not moving."
                     )
                 time.sleep(0.5)
 
@@ -9389,6 +9886,57 @@ def main(backend: str) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Records audio from Reachy Mini's microphone."
+    )
+    parser.add_argument(
+        "--backend",
+        type=str,
+        choices=["default", "gstreamer", "webrtc"],
+        default="default",
+        help="Media backend to use.",
+    )
+
+    args = parser.parse_args()
+    main(backend=args.backend)
+
+## take_picture.py
+
+"""Demonstrate how to make Reachy Mini look at a point in an image.
+
+When you click on the image, Reachy Mini will look at the point you clicked on.
+It uses OpenCV to capture video from a camera and display it, and Reachy Mini's
+look_at_image method to make the robot look at the specified point.
+
+Note: The daemon must be running before executing this script.
+"""
+
+import argparse
+import time
+
+import cv2
+
+from reachy_mini import ReachyMini
+
+
+def main(backend: str) -> None:
+    """Get a frame and take a picture."""
+    with ReachyMini(media_backend=backend) as reachy_mini:
+        frame = reachy_mini.media.get_frame()
+        start_time = time.time()
+        while frame is None:
+            if time.time() - start_time > 20:
+                print("Timeout: Failed to grab frame within 20 seconds.")
+                exit(1)
+            print("Failed to grab frame. Retrying...")
+            frame = reachy_mini.media.get_frame()
+            time.sleep(1)
+
+        cv2.imwrite("reachy_mini_picture.jpg", frame)
+        print("Saved frame as reachy_mini_picture.jpg")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Display Reachy Mini's camera feed and make it look at clicked points."
     )
     parser.add_argument(
         "--backend",
@@ -9845,7 +10393,7 @@ def main(dataset_path: str) -> None:
     recorded_moves = RecordedMoves(dataset_path)
 
     print("Connecting to Reachy Mini...")
-    with ReachyMini(use_sim=False, media_backend="no_media") as reachy:
+    with ReachyMini() as reachy:
         print("Connection successful! Starting dance sequence...\n")
         try:
             while True:
