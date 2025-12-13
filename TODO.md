@@ -1,0 +1,5 @@
+- add to rag feature 
+  - in a specific folder
+- Give info in first message (will only respond if tagged etc)
+- build instructions
+- rename entrypoint to reachy-mini-discord-bot 

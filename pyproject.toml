@@ -21,9 +21,8 @@ dependencies = [
 ]
 
 [project.scripts]
-reachy-mini = "reachy_mini_bot.run:run_bot"
+reachy-mini-discord-bot = "reachy_mini_bot.run:run_bot"
 reachy-mini-ingest = "reachy_mini_bot.scripts.ingest:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["reachy_mini_bot"]
-

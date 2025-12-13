@@ -65,6 +65,7 @@ RAG_DB_PATH=./rag_db
 RAG_COLLECTION=reachy_mini
 OPENAI_MODEL=gpt-4o-mini
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+RAG_DOCUMENTS_PATH=./rag_documents
 THREAD_HISTORY_LIMIT=25
 ```
 
@@ -80,7 +81,7 @@ Tips
 
 ## 6) Run the bot
 - Start the bot via the installed CLI:
-  - `reachy-mini`
+  - `reachy-mini-discord-bot`
 - Or run the module directly:
   - `python -m reachy_mini_bot.run`
 
@@ -91,6 +92,7 @@ You should see logs like “Logged in as Reachy Mini (…)”.
 - The bot creates a thread (e.g., “Reachy Mini: How do I…”) and replies.
 - It will only reply when explicitly @mentioned (even inside that thread).
 - Try the slash command `/ping` to verify command registration.
+- Use `/add_rag` inside a thread to save its current messages into your RAG documents folder (`RAG_DOCUMENTS_PATH/threads`, default `./rag_documents/threads`). Re-run ingestion on that folder to refresh the RAG DB.
 - Attach small text files (`.txt`, `.md`, `.log`) to include them in the context.
 
 ## Troubleshooting
@@ -110,6 +112,7 @@ You should see logs like “Logged in as Reachy Mini (…)”.
 
 ## Configuration reference
 - `RAG_DB_PATH`: path to Chroma persistent storage (default `./rag_db`).
+- `RAG_DOCUMENTS_PATH`: base folder for thread exports saved by `/add_rag` under `threads/` (default `./rag_documents`).
 - `RAG_COLLECTION`: collection name (default `reachy_mini`).
 - `OPENAI_MODEL`: chat model (default `gpt-4o-mini`).
 - `OPENAI_EMBEDDING_MODEL`: embedding model (default `text-embedding-3-small`).
